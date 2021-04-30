@@ -5,7 +5,7 @@
     <div class="container" style="margin-top: 80px">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="{{ route('shop') }}">Home</a></li>
                 <li class="breadcrumb-item active" aria-current="page">Shop</li>
             </ol>
         </nav>
@@ -34,8 +34,7 @@
                                         <input type="hidden" value="{{ $product->id }}" id="id" name="id">
                                         <input type="hidden" value="{{ $product->name }}" id="name" name="name">
                                         <input type="hidden" value="{{ $product->price }}" id="price" name="price">
-                                        <input type="hidden" value="{{ $product->image_path }}" id="img" name="img">
-                                        <input type="hidden" value="{{ $product->slug }}" id="slug" name="slug">
+                                        <input type="hidden" value="{{ $product->image }}" id="image" name="image">
                                         <input type="hidden" value="1" id="quantity" name="quantity">
                                         <div class="card-footer" style="background-color: white;">
                                               <div class="row">

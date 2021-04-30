@@ -24,8 +24,7 @@ class CartController extends Controller
             'price' => $request->price,
             'quantity' => $request->quantity,
             'attributes' => array(
-                'image' => $request->img,
-                'slug' => $request->slug
+                'image' => $request->image,
             )
         ));
         return redirect()->route('cart.index')->with('success_msg', 'Item is Added to Cart!');
