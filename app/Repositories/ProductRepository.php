@@ -25,7 +25,7 @@ class ProductRepository implements ProductInterface
     * @return mixed
     */
     public function getAllProducts($per_page){
-        return  $this->product->paginate($per_page);
+        return  $this->product->where('units','>',0)->paginate($per_page);
     }
     /**
      * add new product
@@ -42,7 +42,7 @@ class ProductRepository implements ProductInterface
     * @return Product Item
     */
     public function getProductById($productId){
-        return $this->product->find($productId);
+        return $this->product->with('supplier','category')->find($productId);
     }
     /**
     * update product by id

@@ -44,7 +44,7 @@ class OrderRepository implements OrderInterface
     * @return Order Item
     */
     public function getOrderById($orderId){
-        return $this->order->find($orderId);
+        return $this->order->with('product','user')->find($orderId);
     }
     /**
     * update order by id
