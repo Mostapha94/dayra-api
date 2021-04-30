@@ -9,7 +9,7 @@ class CartController extends Controller
 {
     public function shop()
     {
-        $products = Product::all();
+        $products = Product::where('units','>',0)->paginate(20);
         return view('frontend.index')->withTitle('Dayra STORE | SHOP')->with(['products' => $products]);
     }
 
@@ -57,6 +57,11 @@ class CartController extends Controller
             $order->user_id=auth()->user()->id;
             $order->quantity=$product->quantity;
             $order->save();
+
+            //async with product units
+            $product_unit=Product::find($product->id);
+            $product_unit->units--;
+            $product_unit->save();
         }
         \Cart::clear();
         return redirect()->route('cart.index')->with('success_msg', 'Checkoute Done Successfully!');

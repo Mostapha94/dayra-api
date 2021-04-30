@@ -23,7 +23,7 @@
                             <div class="card" style="margin-bottom: 20px; height: auto;">
                                 <img src="{{ MAINAUPLOADS }}/products/{{ $product->image }}"
                                      class="card-img-top mx-auto"
-                                     style="height: 150px; width: 150px;display: block;"
+                                     style="height: 150px; width: 250px;display: block;"
                                      alt="{{ $product->image }}"
                                 >
                                 <div class="card-body">
@@ -48,6 +48,9 @@
                             </div>
                         </div>
                     @endforeach
+                    <div class="paination">
+                        {{ $products->links() }}
+                    </div>
                 </div>
             </div>
         </div>
