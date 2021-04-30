@@ -1,70 +1,85 @@
 <?php
 namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
-use App\Models\Product;
-use App\Models\Order;
+use App\Repositories\OrderRepository;
+use App\Traits\GeneralTrait;
+
 use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
+    use GeneralTrait;
+    /**
+    * @var $orderRepository
+    */
+    protected $orderRepository;
+    /**
+     * ProductController constructor.
+    */
+    public function __construct()
+    {
+        $this->orderRepository=new OrderRepository();
+    }
+    /**
+     * Display a listing of all products in shop
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function shop()
     {
-        $products = Product::where('units','>',0)->paginate(20);
-        return view('frontend.index')->withTitle('Dayra STORE | SHOP')->with(['products' => $products]);
+        return view('frontend.index')->withTitle('Dayra STORE | SHOP')->with(['products' => $this->getAllProducts()]);
     }
-
+    /**
+     * Display a listing of all products in cart
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function cart()  {
         $cartCollection = \Cart::getContent();
         return view('frontend.cart')->withTitle('Dayra STORE | CART')->with(['cartCollection' => $cartCollection]);;
     }
-
+    /**
+    * add product to cart
+    * @param  \Illuminate\Http\Request  $request
+    * @return \Illuminate\Http\Response
+    */
     public function add(Request $request){
-        \Cart::add(array(
-            'id' => $request->id,
-            'name' => $request->name,
-            'price' => $request->price,
-            'quantity' => $request->quantity,
-            'attributes' => array(
-                'image' => $request->image,
-            )
-        ));
+        $this->orderRepository->addProductToCart($request);
         return redirect()->route('cart.index')->with('success_msg', 'Item is Added to Cart!');
     }
-
+    /**
+    * remove selected product in cart
+    * @param  \Illuminate\Http\Request  $request
+    * @return \Illuminate\Http\Response
+    */
     public function remove(Request $request){
         \Cart::remove($request->id);
         return redirect()->route('cart.index')->with('success_msg', 'Item is removed!');
     }
-
+    /**
+    * update selected product in cart
+    * @param  \Illuminate\Http\Request  $request
+    * @return \Illuminate\Http\Response
+    */
     public function update(Request $request){
-        \Cart::update($request->id,
-            array(
-                'quantity' => array(
-                    'relative' => false,
-                    'value' => $request->quantity
-                ),
-        ));
+        $this->orderRepository->updateProductInCart($request);
         return redirect()->route('cart.index')->with('success_msg', 'Cart is Updated!');
     }
+    /**
+    * checkout to all products in cart
+    */
     public function clear(){
         \Cart::clear();
         return redirect()->route('cart.index')->with('success_msg', 'Cart is cleared!');
     }
-    public function checkout(){
-        foreach(\Cart::getContent()as $product){
-            $order=new Order();
-            $order->product_id=$product->id;
-            $order->user_id=auth()->user()->id;
-            $order->quantity=$product->quantity;
-            $order->save();
-
-            //async with product units
-            $product_unit=Product::find($product->id);
-            $product_unit->units--;
-            $product_unit->save();
-        }
-
-        auth()->user()->withdraw(\Cart::getTotal()); 
+    /**
+    * checkout to all products in cart
+    */
+    public function checkout(Request $request){
+        $request['products']=\Cart::getContent();
+        $request['user_id']=auth()->user()->id;
+        $request['total_price']=\Cart::getTotal();
+        $this->orderRepository->checkout($request);
         \Cart::clear();
         return redirect()->route('cart.index')->with('success_msg', 'Checkoute Done Successfully!');
     }

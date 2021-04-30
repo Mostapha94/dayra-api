@@ -38,5 +38,22 @@ interface OrderInterface
      * @param $orderId
      */
     public function deleteOrderById($orderId);
+    /**
+    * add product to cart
+    * @param  \Illuminate\Http\Request  $request
+    * @return \Illuminate\Http\Response
+    */
+    public function addProductToCart($request);
+    /**
+    * update product in cart
+    * @param  \Illuminate\Http\Request  $request
+    * @return \Illuminate\Http\Response
+    */
+    public function updateProductInCart($request);
+    /**
+    * checkout process to all products in cart
+    * @param  \Illuminate\Http\Request  $request
+    */
+    public function checkout($request);
   
 }

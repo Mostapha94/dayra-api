@@ -1,9 +1,16 @@
 <?php
 
 namespace App\Traits;
+use App\Models\Product;
 
 trait GeneralTrait
 {
+    /**
+     * get all products
+     */
+    public function getAllProducts(){
+        return Product::where('units','>',0)->paginate(20);
+    }
     /**
      * Check count of items
      * @param $obj

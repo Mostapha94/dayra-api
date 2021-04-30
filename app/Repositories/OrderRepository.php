@@ -2,6 +2,8 @@
 namespace App\Repositories;
 use Request;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\User;
 use App\Interfaces\OrderInterface;
 /**
  * Class OrderRepository
@@ -74,4 +76,56 @@ class OrderRepository implements OrderInterface
         $order->save();
         return $order;
     }
+    /**
+    * add product to cart
+    * @param  \Illuminate\Http\Request  $request
+    * @return \Illuminate\Http\Response
+    */
+    public function addProductToCart($request){
+        \Cart::add(array(
+            'id' => $request->id,
+            'name' => $request->name,
+            'price' => $request->price,
+            'quantity' => $request->quantity,
+            'attributes' => array(
+                'image' => $request->image,
+            )
+        ));
+    }
+    /**
+    * update product in cart
+    * @param  \Illuminate\Http\Request  $request
+    * @return \Illuminate\Http\Response
+    */
+    public function updateProductInCart($request){
+        \Cart::update($request->id,
+            array(
+                'quantity' => array(
+                    'relative' => false,
+                    'value' => $request->quantity
+                ),
+        ));
+    }
+    /**
+    * checkout process to all products in cart
+    * @param  \Illuminate\Http\Request  $request
+    */
+    public function checkout($request){
+        $user=User::find($request->user_id);
+        foreach(json_decode($request->products) as $product){
+            $order=new Order();
+            $order->product_id=$product->id;
+            $order->user_id=$user->id;
+            $order->quantity=$product->quantity;
+            $order->save();
+
+            //async with product units
+            $product_unit=Product::find($product->id);
+            $product_unit->units--;
+            $product_unit->save();
+        }
+        //edit walit
+        $user->withdraw($request->total_price); 
+    }
+
 }

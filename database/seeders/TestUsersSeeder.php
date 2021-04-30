@@ -32,6 +32,7 @@ class TestUsersSeeder extends Seeder
         $user->phone     = "0000000";
         $user->password  = Hash::make('dayra5002021');
         $user->save();
+        $user->deposit(50000);
 
         //Supplier
         $supplier = new Supplier();

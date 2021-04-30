@@ -7,6 +7,7 @@ use App\Http\Resources\OrderResource;
 use App\Http\Resources\OrdersResource;
 use App\Traits\GeneralTrait;
 use App\Repositories\OrderRepository;
+use Illuminate\Http\Request;
 use App\Http\Requests\OrderRequest;
 use Illuminate\Support\Facades\DB;
 
@@ -113,5 +114,23 @@ class OrderController extends Controller
         $this->OrderRepository->deleteOrderById($id);
         return response()->json(['response'=>['status' => true ,'code' => 200 ,'message'=>  __('Order Deleted Successfully') ]]);    
         
+    }
+      /**
+     * Update the specified resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function checkout(Request $request)
+    {
+        DB::beginTransaction();
+        try {
+            $this->OrderRepository->checkout($request);
+            DB::commit();
+            return response()->json(['response'=>['status' => true ,'code' => 200 ,'message'=>  __('Checkout Done Successfully') ]]);    
+        }catch(\Exception $e){
+            DB::rollback();
+            return $this->someThingError();
+        }
     }
 }

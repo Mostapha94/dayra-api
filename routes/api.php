@@ -40,6 +40,7 @@ Route::group(['middleware' => ['api']], function () {
         Route::post('/add-order', [App\Http\Controllers\Api\OrderController::class, 'store']);
         Route::post('/update-order/{id}', [App\Http\Controllers\Api\OrderController::class, 'update']);
         Route::post('/delete-order/{id}', [App\Http\Controllers\Api\OrderController::class, 'destroy']);
+        Route::post('/checkout', [App\Http\Controllers\Api\OrderController::class, 'checkout']);
 
     });
 
