@@ -93,7 +93,7 @@
                         </ul>
                     </div>
                     <br><a href="{{ route('shop') }}" class="btn btn-dark">Continue Shopping</a>
-                    <a href="/checkout" class="btn btn-success">Proceed To Checkout</a>
+                    <a href="{{ route('cart.checkout') }}" class="btn btn-success">Proceed To Checkout</a>
                 </div>
             @endif
         </div>

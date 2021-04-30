@@ -3,7 +3,7 @@
         <li class="list-group-item">
             <div class="row">
                 <div class="col-lg-3">
-                    <img src="/images/{{ $item->attributes->image }}"
+                    <img src="{{ MAINAUPLOADS }}/products/{{ $item->attributes->image }}"
                          style="width: 50px; height: 50px;"
                     >
                 </div>
@@ -37,7 +37,7 @@
         <a class="btn btn-dark btn-sm btn-block" href="{{ route('cart.index') }}">
             CART <i class="fa fa-arrow-right"></i>
         </a>
-        <a class="btn btn-dark btn-sm btn-block" href="">
+        <a class="btn btn-dark btn-sm btn-block" href="{{ route('cart.checkout') }}">
             CHECKOUT <i class="fa fa-arrow-right"></i>
         </a>
     </div>

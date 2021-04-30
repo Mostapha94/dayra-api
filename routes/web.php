@@ -32,6 +32,7 @@ Route::group(['middleware' => 'auth' ], function (){
     Route::post('/update',[App\Http\Controllers\Frontend\CartController::class, 'update'])->name('cart.update');
     Route::post('/remove',[App\Http\Controllers\Frontend\CartController::class, 'remove'])->name('cart.remove');
     Route::post('/clear',[App\Http\Controllers\Frontend\CartController::class, 'clear'])->name('cart.clear');
+    Route::get('/checkout',[App\Http\Controllers\Frontend\CartController::class, 'checkout'])->name('cart.checkout');
 
 });  
 

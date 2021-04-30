@@ -2,6 +2,7 @@
 namespace App\Http\Controllers\Frontend;
 use App\Http\Controllers\Controller;
 use App\Models\Product;
+use App\Models\Order;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
@@ -48,6 +49,17 @@ class CartController extends Controller
     public function clear(){
         \Cart::clear();
         return redirect()->route('cart.index')->with('success_msg', 'Cart is cleared!');
+    }
+    public function checkout(){
+        foreach(\Cart::getContent()as $product){
+            $order=new Order();
+            $order->product_id=$product->id;
+            $order->user_id=auth()->user()->id;
+            $order->quantity=$product->quantity;
+            $order->save();
+        }
+        \Cart::clear();
+        return redirect()->route('cart.index')->with('success_msg', 'Checkoute Done Successfully!');
     }
 
 }
