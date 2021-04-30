@@ -9,9 +9,13 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 
-class User extends Authenticatable implements JWTSubject
+use Bavix\Wallet\Traits\HasWallet; 
+
+use Bavix\Wallet\Interfaces\Wallet; 
+
+class User extends Authenticatable implements JWTSubject , Wallet
 {
-    use HasFactory, Notifiable , SoftDeletes ;
+    use HasFactory, Notifiable , SoftDeletes , HasWallet;
 
     /**
      * The attributes that are mass assignable.

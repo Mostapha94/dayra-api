@@ -63,6 +63,8 @@ class CartController extends Controller
             $product_unit->units--;
             $product_unit->save();
         }
+
+        auth()->user()->withdraw(\Cart::getTotal()); 
         \Cart::clear();
         return redirect()->route('cart.index')->with('success_msg', 'Checkoute Done Successfully!');
     }
